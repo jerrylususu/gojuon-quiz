@@ -108,7 +108,7 @@ export default {
     },
     computed: {
         correct() {
-            return this.current.sound.split(",").includes(this.inputValue)
+            return this.current.sound.split(",").includes(this.inputValue.toLowerCase());
         },
         maxLenInAnswer() {
             return this.current.sound.split(",").map(x => x.length).reduce((a, b) => Math.max(a, b))
