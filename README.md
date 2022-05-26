@@ -1,24 +1,7 @@
-# gojuon-quiz
+# Gojuon Quiz
 
-## Project setup
-```
-yarn install
-```
+一个五十音记忆辅助工具，包含准确率和速度统计。
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+[http://nekonull.me/50](http://nekonull.me/50)
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![screenshot](screenshot.png)
