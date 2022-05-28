@@ -11,11 +11,14 @@
 <details>
     <summary>{{ t('settings_title') }}</summary>
     {{ t('settings.input_wait') }} <input type="number" v-model="this.settings.correct_wait_ms" /> ms
+    <br />
     Language:  <select v-model="$i18n.locale">
       <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
         {{ lang }}
       </option>
     </select>
+    <br />
+    假名字体：<input type="text" v-model="this.settings.font_css_str"/>
 </details>
 
 <details>
@@ -32,7 +35,7 @@
 
 
 <div class="wrapper">
-<table class="centered">
+<table class="centered" :style="this.custom_css">
   <tr>
     <th>{{ t('hiragana') }}</th>
     <th>{{ t('katakana') }}</th>
@@ -100,6 +103,7 @@ export default {
             initial_input: true,
             settings: {
                 correct_wait_ms: 1000,
+                font_css_str: 'serif, sans-serif'
             },
             current: {
                 hiragana: "",
@@ -152,6 +156,9 @@ export default {
         average_time_str() {
             return `${(this.stats.total_response_time / this.stats.total_tested).toFixed(2)}ms`
         },
+        custom_css() {
+            return `font-family: ${this.settings.font_css_str};`
+        }
     },
     methods: {
         onInput() {
@@ -360,6 +367,8 @@ export default {
     setup() {
         const { t } = useI18n({
             inheritLocale: true,
+            missingWarn: false,
+            fallbackWarn: false,
             // useScope: 'local',
         })
 
