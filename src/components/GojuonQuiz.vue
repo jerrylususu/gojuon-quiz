@@ -16,6 +16,7 @@
 <details>
     <summary>历史数据</summary>
     总体正确率：{{this.total_accruacy_str}} ({{this.stats.total_correct}}/{{this.stats.total_tested}}) 平均用时: {{this.average_time_str}}
+    完成组数：{{this.stats.pool_finish_count}} 连击：{{this.stats.combo}} (最高: {{this.stats.max_combo}})
     最近10个 
     <span v-for="item in this.stats.last_10.slice().reverse()" :key="item.enrolled_time" :class="{correct: item.isCorrect, incorrect: !item.isCorrect}">  
         {{item.hiragana}}{{item.katakana}}
@@ -101,9 +102,13 @@ export default {
                 total_tested: 0,
                 total_correct: 0,
                 total_response_time: 0,
+                pool_finish_count: 0,
+                combo: 0,
+                max_combo: 0,
             },
             history: [],
             hiragana_to_history: {},
+            pool: [],
         }
     },
     computed: {
@@ -183,7 +188,14 @@ export default {
             if (this.stats.last_10.length > 10) {
                 this.stats.last_10.shift();
             }
+
+            if(!this.correct) {
+                this.stats.combo = 0;
+            }
+
             if(this.correct) {
+                this.stats.combo += 1;
+                this.stats.max_combo = Math.max(this.stats.max_combo, this.stats.combo);
                 this.stats.total_response_time += response_time;
                 this.stats.total_correct += 1;
                 let history_item = this.hiragana_to_history[this.current.hiragana]
@@ -223,10 +235,20 @@ export default {
         },
         next() {
             this.inputValue = ""
-            // console.log("next")
-            // choose one random item from gujuon_data
-            const random_index = Math.floor(Math.random() * gujuon_data.length);
-            const next_item = gujuon_data[random_index];
+            // try to balance between true random and iterate all items in pull
+            let next_item = null
+            if (this.pool.length == 0) {
+                this.fillPool()
+                this.stats.pool_finish_count += 1;
+            }
+            if (Math.random() < 0.8 && !this.initial_input) {
+                let random_index = Math.floor(Math.random() * this.pool.length)
+                next_item = this.pool[random_index]
+                this.pool.splice(random_index, 1)
+            } else {
+                next_item = gujuon_data[Math.floor(Math.random() * gujuon_data.length)];
+            }
+
             this.current.sound = next_item.sound;
             this.current.hiragana = next_item.hiragana;
             this.current.katakana = next_item.katakana;
@@ -315,9 +337,13 @@ export default {
             return {
                 backgroundColor: color,
             }
+        },
+        fillPool() {
+            this.pool = [...gujuon_data];
         }
     },
     mounted() {
+        this.fillPool()
         this.next()
         this.buildHistoryMatrix()
     }
