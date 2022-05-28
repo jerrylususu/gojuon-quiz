@@ -11,7 +11,7 @@ module.exports = defineConfig({
       enableLegacy: false,
       runtimeOnly: false,
       compositionOnly: false,
-      fullInstall: true
+      fullInstall: true,
     }
   }
 })
