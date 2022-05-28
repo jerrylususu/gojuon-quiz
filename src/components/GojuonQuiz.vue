@@ -18,7 +18,7 @@
       </option>
     </select>
     <br />
-    假名字体：<input type="text" v-model="this.settings.font_css_str"/>
+    {{ t('settings.font') }}: <input type="text" v-model="this.settings.font_css_str"/>
 </details>
 
 <details>

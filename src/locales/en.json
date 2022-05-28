@@ -8,7 +8,8 @@
     ],
     "settings_title": "Settings",
     "settings": {
-      "input_wait": "Wait time after correct input"
+      "input_wait": "Wait time after correct input",
+      "font": "Font setting"
     },
     "history_title": "Stats",
     "history": {
