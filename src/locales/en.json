@@ -1,0 +1,27 @@
+{
+    "quickstart_title": "Quickstart",
+    "quickstart_content": [
+      "Randomly choose A hiragana or katakana, and enter its corresponding sound.",
+      "If the input is correct, the background of the input box will turn green, and you can press Enter to enter the next question, or wait for it to automatically display the next question. If the input is incorrect, the background of the input box turns red, and you need to press Enter to manually enter the next question.",
+      "Only correct answers will be counted for speed and accuracy. The first entry does not count. The greener the color, the better (shorter time, higher accuracy).",
+      "Give me a star: "
+    ],
+    "settings_title": "Settings",
+    "settings": {
+      "input_wait": "Wait time after correct input"
+    },
+    "history_title": "Stats",
+    "history": {
+      "overall_accuracy": "Overall Accuracy",
+      "overall_time": "Avg. Time",
+      "finished_pool": "Round Finished",
+      "combo": "Combo",
+      "max_combo": "Max Combo",
+      "last_10": "Last 10"
+    },
+    "hiragana": "Hiragana",
+    "katakana": "Katakana",
+    "sound": "Sound",
+    "speed_stat": "Speed / Response Time",
+    "accuracy_stat": "Accuracy"
+  }

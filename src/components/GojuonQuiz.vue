@@ -1,23 +1,30 @@
 <template>
 <details>
-    <summary>使用说明</summary>
+    <summary>{{ t('quickstart_title') }}</summary>
 
-<p>随机显示一个平假名或片假名，需要输入其对应的发音。</p>
-<p>输入正确后输入框背景会变为绿色，可以按下回车进入下一题，但稍等一会也会自动进入下一题。输入错误后输入框背景变为红色，需要按下回车手动进入下一题。</p>
-<p>仅正确输入会计入时间和准确率。首次输入不计入时间和准确率。数值颜色越绿表示越好（时间更短、准确率越高）。</p>
-<p>点个 Star 吧：<a href="https://github.com/jerrylususu/gojuon-quiz" target="_blank" >Github</a></p>
+<p>{{ t('quickstart_content.0') }}</p>
+<p>{{ t('quickstart_content.1') }}</p>
+<p>{{ t('quickstart_content.2') }}</p>
+<p>{{ t('quickstart_content.3') }}<a href="https://github.com/jerrylususu/gojuon-quiz" target="_blank" >Github</a></p>
 
 </details>
 <details>
-    <summary>设置</summary>
-    输入正确后等待时间（ms）：<input type="number" v-model="this.settings.correct_wait_ms" />
+    <summary>{{ t('settings_title') }}</summary>
+    {{ t('settings.input_wait') }} <input type="number" v-model="this.settings.correct_wait_ms" /> ms
+    Language:  <select v-model="$i18n.locale">
+      <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
+        {{ lang }}
+      </option>
+    </select>
 </details>
 
 <details>
-    <summary>历史数据</summary>
-    总体正确率：{{this.total_accruacy_str}} ({{this.stats.total_correct}}/{{this.stats.total_tested}}) 平均用时: {{this.average_time_str}}
-    完成组数：{{this.stats.pool_finish_count}} 连击：{{this.stats.combo}} (最高: {{this.stats.max_combo}})
-    最近10个 
+    <summary>{{ t('history_title') }}</summary>
+    {{ t('history.overall_accuracy') }}: {{this.total_accruacy_str}} ({{this.stats.total_correct}}/{{this.stats.total_tested}}) 
+    {{ t('history.overall_time') }}: {{this.average_time_str}}
+    {{ t('history.finished_pool') }}: {{this.stats.pool_finish_count}} 
+    {{ t('history.combo') }}: {{this.stats.combo}} ({{ t('history.max_combo') }} {{this.stats.max_combo}})
+    {{ t('history.last_10') }} 
     <span v-for="item in this.stats.last_10.slice().reverse()" :key="item.enrolled_time" :class="{correct: item.isCorrect, incorrect: !item.isCorrect}">  
         {{item.hiragana}}{{item.katakana}}
     </span>
@@ -27,9 +34,9 @@
 <div class="wrapper">
 <table class="centered">
   <tr>
-    <th>平假名</th>
-    <th>片假名</th>
-    <th>读音</th>
+    <th>{{ t('hiragana') }}</th>
+    <th>{{ t('katakana') }}</th>
+    <th>{{ t('sound') }}</th>
   </tr>
   <tr>
     <td class="large">{{this.display_hiragana}}</td>
@@ -42,7 +49,7 @@
 </div>
 
 <details>
-    <summary>速度统计（ms）</summary>
+    <summary>{{ t('speed_stat') }} (ms)</summary>
     <table>
         <tr v-for="(row, hidx) in this.history" :key="hidx">
             <td v-for="(item, vidx) in row" :key="vidx" :style="this.speed_style(item)">
@@ -54,7 +61,7 @@
 </details>
 
 <details>
-    <summary>正确率统计</summary>
+    <summary>{{ t('accuracy_stat') }}</summary>
     <table>
         <tr v-for="(row, hidx) in this.history" :key="hidx">
             <td v-for="(item, vidx) in row" :key="vidx" :style="this.accuracy_style(item)">
@@ -78,6 +85,8 @@
 <script>
 
 import { gujuon_data } from "@/gojuon.js";
+import { useI18n } from 'vue-i18n'
+
 
 export default {
     data() {
@@ -109,6 +118,7 @@ export default {
             history: [],
             hiragana_to_history: {},
             pool: [],
+            langs: ['zh', 'en']
         }
     },
     computed: {
@@ -346,7 +356,15 @@ export default {
         this.fillPool()
         this.next()
         this.buildHistoryMatrix()
-    }
+    },
+    setup() {
+        const { t } = useI18n({
+            inheritLocale: true,
+            // useScope: 'local',
+        })
+
+        return { t }
+  }
 }
 </script>
 
