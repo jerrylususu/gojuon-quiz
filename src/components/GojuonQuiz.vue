@@ -23,18 +23,30 @@
 
 <details>
     <summary>{{ t('history_title') }}</summary>
-    {{ t('history.overall_accuracy') }}: {{this.total_accruacy_str}} ({{this.stats.total_correct}}/{{this.stats.total_tested}}) 
-    {{ t('history.overall_time') }}: {{this.average_time_str}}
-    {{ t('history.finished_pool') }}: {{this.stats.pool_finish_count}} 
-    {{ t('history.combo') }}: {{this.stats.combo}} ({{ t('history.max_combo') }} {{this.stats.max_combo}})
-    {{ t('history.last_10') }} 
-    <span v-for="item in this.stats.last_10.slice().reverse()" :key="item.enrolled_time" :class="{correct: item.isCorrect, incorrect: !item.isCorrect}">  
-        {{item.hiragana}}{{item.katakana}}
-    </span>
+    <table>
+        <tr>
+            <th>{{ t('history.overall_accuracy') }}</th>
+            <th>{{ t('history.overall_time') }}</th>
+            <th>{{ t('history.finished_pool') }}</th>
+            <th>{{ t('history.combo') }}</th>
+            <th>{{ t('history.last_10') }} </th>
+        </tr>
+        <tr>
+            <td class="text-centered">{{this.total_accruacy_str}} ({{this.stats.total_correct}}/{{this.stats.total_tested}})</td>
+            <td class="text-centered">{{this.average_time_str}}</td>
+            <td class="text-centered">{{this.stats.pool_finish_count}}</td>
+            <td class="text-centered">{{this.stats.combo}} ({{ t('history.max_combo') }} {{this.stats.max_combo}})</td>
+            <td>    
+                <span v-for="item in this.stats.last_10.slice().reverse()" :key="item.enrolled_time" :class="{correct: item.isCorrect, incorrect: !item.isCorrect}">  
+                    {{item.hiragana}}{{item.katakana}}
+                </span>
+            </td>
+        </tr>
+    </table>
 </details>
 
 
-<div class="wrapper">
+<div class="text-centered">
 <table class="centered" :style="this.custom_css">
   <tr>
     <th>{{ t('hiragana') }}</th>
@@ -227,7 +239,6 @@ export default {
             
             for (const row of this.history) {
                 for (const cell of row) {
-                    console.log(cell)
                     if (cell.avg_time_ms > 0) {
                         max_time = Math.max(max_time, cell.avg_time_ms)
                         min_time = Math.min(min_time, cell.avg_time_ms)
@@ -393,12 +404,12 @@ export default {
     font-size: 30px;
 }
 
-.wrapper {
-    text-align: center;
-}
-
 .centered {
     margin: 0 auto;
+}
+
+.text-centered {
+    text-align: center;
 }
 
 .correct {
