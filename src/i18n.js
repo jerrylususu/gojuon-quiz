@@ -27,4 +27,6 @@ export default createI18n({
   messages: loadLocaleMessages(),
   silentTranslationWarn: true,
   silentFallbackWarn: true,
+  missingWarn: false,
+  fallbackWarn: false,
 })
