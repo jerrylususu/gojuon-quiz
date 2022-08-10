@@ -19,6 +19,11 @@
     </select>
     <br />
     {{ t('settings.font') }}: <input type="text" v-model="this.settings.font_css_str"/>
+    <br />
+    {{ t('settings.test_on')}}: 
+    {{ t('hiragana')}} <input type="checkbox" v-model="hiragana_enabled">
+    {{ t('katakana')}} <input type="checkbox" v-model="katakana_enabled">
+    <p v-if="!hiragana_enabled && !katakana_enabled" style="color: red">{{ t('settings.nothing_can_be_shown')}}</p>
 </details>
 
 <details>
@@ -60,7 +65,8 @@
   </tr>
 </table>
 
-<input class="sound-input centered" :class="inputBackgroundClass" @input="onInput" v-on:keyup.enter="onEnter" v-model="this.inputValue" type="text"/>
+<input class="sound-input centered" :class="inputBackgroundClass" @input="onInput" v-on:keyup.enter="onEnter" v-model="this.inputValue" type="text"
+    :disabled="!hiragana_enabled && !katakana_enabled"/>
 </div>
 
 <details>
@@ -134,7 +140,9 @@ export default {
             history: [],
             hiragana_to_history: {},
             pool: [],
-            langs: ['zh', 'en']
+            langs: ['zh', 'en'],
+            hiragana_enabled: true,
+            katakana_enabled: true,
         }
     },
     computed: {
@@ -282,13 +290,24 @@ export default {
             this.current.katakana = next_item.katakana;
 
             // random hide hiragana or katakana
-            if (Math.random() > 0.5) {
-                this.show_hiragana = false;
-                this.show_katakana = true;
+            if (this.hiragana_enabled && this.katakana_enabled) {
+                if (Math.random() > 0.5) {
+                    this.show_hiragana = false;
+                    this.show_katakana = true;
+                } else {
+                    this.show_katakana = false;
+                    this.show_hiragana = true;
+                }
             } else {
-                this.show_katakana = false;
-                this.show_hiragana = true;
+                if (this.hiragana_enabled && !this.katakana_enabled) {
+                    this.show_hiragana = true;
+                    this.show_katakana = false;
+                } else if (!this.hiragana_enabled && this.katakana_enabled) {
+                    this.show_hiragana = false;
+                    this.show_katakana = true;
+                }
             }
+            
             this.show_sound = false;
 
             // add history

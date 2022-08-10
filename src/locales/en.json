@@ -9,7 +9,9 @@
     "settings_title": "Settings",
     "settings": {
       "input_wait": "Wait time after correct input",
-      "font": "Font setting"
+      "font": "Font setting",
+      "test_on": "Test on",
+      "nothing_can_be_shown": "Nothing can be shown"
     },
     "history_title": "Stats",
     "history": {

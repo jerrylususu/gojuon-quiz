@@ -9,7 +9,9 @@
   "settings_title": "设置",
   "settings": {
     "input_wait": "输入正确后等待时间",
-    "font": "假名字体"
+    "font": "假名字体",
+    "test_on": "题目包括",
+    "nothing_can_be_shown": "没有可以显示的题目"
   },
   "history_title": "历史数据",
   "history": {
