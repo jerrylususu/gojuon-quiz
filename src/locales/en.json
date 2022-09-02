@@ -4,7 +4,8 @@
       "Randomly choose A hiragana or katakana, and enter its corresponding sound.",
       "If the input is correct, the background of the input box will turn green, and you can press Enter to enter the next question, or wait for it to automatically display the next question. If the input is incorrect, the background of the input box turns red, and you need to press Enter to manually enter the next question.",
       "Only correct answers will be counted for speed and accuracy. The first entry does not count. The greener the color, the better (shorter time, higher accuracy).",
-      "Give me a star: "
+      "Give me a star: ",
+      "Why use a password input?: This allows the IME (input method editor) to be bypassed, so this app can be used on phones."
     ],
     "settings_title": "Settings",
     "settings": {

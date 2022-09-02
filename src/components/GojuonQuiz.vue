@@ -6,6 +6,7 @@
 <p>{{ t('quickstart_content.1') }}</p>
 <p>{{ t('quickstart_content.2') }}</p>
 <p>{{ t('quickstart_content.3') }}<a href="https://github.com/jerrylususu/gojuon-quiz" target="_blank" >Github</a></p>
+<p>{{ t('quickstart_content.4') }}</p>
 
 </details>
 <details>
@@ -65,8 +66,9 @@
   </tr>
 </table>
 
-<input class="sound-input centered" :class="inputBackgroundClass" @input="onInput" v-on:keyup.enter="onEnter" v-model="this.inputValue" type="text"
-    :disabled="!hiragana_enabled && !katakana_enabled"/>
+<div class="sound-input centered" :class="inputBackgroundClass">&nbsp;{{this.inputValue}}&nbsp;</div>
+<input class="sound-input centered" :class="inputBackgroundClass" @input="onInput" v-on:keyup.enter="onEnter" v-model="this.inputValue" type="password"
+    :disabled="!hiragana_enabled && !katakana_enabled" autocomplete="off"/>
 </div>
 
 <details>
