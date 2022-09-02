@@ -26,6 +26,7 @@
   "hiragana": "平假名",
   "katakana": "片假名",
   "sound": "读音",
+  "click_above_to_start": "点击上方输入框开始",
   "speed_stat": "速度统计",
   "accuracy_stat": "正确率统计"
 }

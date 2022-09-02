@@ -26,6 +26,7 @@
     "hiragana": "Hiragana",
     "katakana": "Katakana",
     "sound": "Sound",
+    "click_above_to_start": "Click the box to start typing",
     "speed_stat": "Speed / Response Time",
     "accuracy_stat": "Accuracy"
   }

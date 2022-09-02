@@ -67,8 +67,9 @@
 </table>
 
 <div class="sound-input centered" :class="inputBackgroundClass">&nbsp;{{this.inputValue}}&nbsp;</div>
-<input class="sound-input centered" :class="inputBackgroundClass" @input="onInput" v-on:keyup.enter="onEnter" v-model="this.inputValue" type="password"
-    :disabled="!hiragana_enabled && !katakana_enabled" autocomplete="off"/>
+<input class="sound-input centered"  @input="onInput" v-on:keyup.enter="onEnter" v-model="this.inputValue" type="password"
+    :disabled="!hiragana_enabled && !katakana_enabled" autocomplete="off" style="color:transparent"/>
+<div class="centered" v-show="initial_input">{{ t('click_above_to_start') }}</div>
 </div>
 
 <details>
