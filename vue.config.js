@@ -13,9 +13,9 @@ module.exports = defineConfig({
       compositionOnly: false,
       fullInstall: true,
     },
-    pwa: {
-      workboxPluginMode: 'GenerateSW',
-      name: 'Gojuon Quiz',
-    }
+  },
+
+  pwa: {
+    name: 'Gojuon Quiz',
   }
 })
