@@ -1,6 +1,6 @@
-# Gojuon Quiz
-
 <img align="right" width="200" height="200" src="src/assets/logo.png">
+
+# Gojuon Quiz
 
 一个五十音记忆辅助工具，包含准确率和速度统计。
 

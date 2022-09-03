@@ -1,6 +1,6 @@
-# Gojuon Quiz
-
 <img align="right" width="200" height="200" src="src/assets/logo.png">
+
+# Gojuon Quiz
 
 [中文](README_zh-cn.md)
 
