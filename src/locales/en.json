@@ -28,5 +28,7 @@
     "sound": "Sound",
     "click_above_to_start": "Click the box to start typing",
     "speed_stat": "Speed / Response Time",
-    "accuracy_stat": "Accuracy"
+    "accuracy_stat": "Accuracy",
+    "update_available": "An update is available, click to update",
+    "update_button": "Update"
   }
