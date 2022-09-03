@@ -71,7 +71,7 @@
     :disabled="!hiragana_enabled && !katakana_enabled" autocomplete="off" style="color:transparent"/>
 <div class="centered" v-show="initial_input">{{ t('click_above_to_start') }}</div>
 </div>
-
+123
 <details>
     <summary>{{ t('speed_stat') }} (ms)</summary>
     <table>

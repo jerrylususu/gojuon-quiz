@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
-  publicPath: './',
+  // publicPath: './',
 
   pluginOptions: {
     i18n: {
@@ -12,6 +12,9 @@ module.exports = defineConfig({
       runtimeOnly: false,
       compositionOnly: false,
       fullInstall: true,
+    },
+    pwa: {
+      workboxPluginMode: 'GenerateSW',
     }
   }
 })
