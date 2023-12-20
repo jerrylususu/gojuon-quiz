@@ -6,6 +6,10 @@ jobs:
     name: Build Vue
     steps:
     - uses: actions/checkout@v2
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16
     - id: Build-Vue
       uses: xRealNeon/VuePagesAction@1.0.1
       with:
