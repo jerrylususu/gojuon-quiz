@@ -24,6 +24,14 @@
     {{ t('settings.test_on')}}: 
     {{ t('hiragana')}} <input type="checkbox" v-model="hiragana_enabled">
     {{ t('katakana')}} <input type="checkbox" v-model="katakana_enabled">
+    <br />
+    {{ t('settings.enabled_rows')}} 
+    <div>
+        <label v-for="(row, index) in all_supported_rows" :key="index">
+            <input type="checkbox" v-model="settings.enabled_rows" @change="initGame" :value="row">
+            {{ row }}
+        </label>
+    </div>
     <p v-if="!hiragana_enabled && !katakana_enabled" style="color: red">{{ t('settings.nothing_can_be_shown')}}</p>
 </details>
 
@@ -124,7 +132,8 @@ export default {
             initial_input: true,
             settings: {
                 correct_wait_ms: 1000,
-                font_css_str: 'serif, sans-serif'
+                font_css_str: 'serif, sans-serif',
+                enabled_rows: ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa", "(...)"]
             },
             current: {
                 hiragana: "",
@@ -146,6 +155,7 @@ export default {
             langs: ['zh', 'en'],
             hiragana_enabled: true,
             katakana_enabled: true,
+            all_supported_rows: ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa", "(...)"]
         }
     },
     computed: {
@@ -285,7 +295,7 @@ export default {
                 next_item = this.pool[random_index]
                 this.pool.splice(random_index, 1)
             } else {
-                next_item = gujuon_data[Math.floor(Math.random() * gujuon_data.length)];
+                next_item = this.randomInRange();
             }
 
             this.current.sound = next_item.sound;
@@ -389,13 +399,24 @@ export default {
             }
         },
         fillPool() {
-            this.pool = [...gujuon_data];
+            this.pool = [...gujuon_data].filter(x =>
+                this.settings.enabled_rows.includes(x.row)
+                || (this.settings.enabled_rows.includes("(...)") && !this.all_supported_rows.includes(x.row)));
+        },
+        randomInRange() {
+            const selected = [...gujuon_data].filter(x =>
+                this.settings.enabled_rows.includes(x.row)
+                || (this.settings.enabled_rows.includes("(...)") && !this.all_supported_rows.includes(x.row)));
+            return selected[Math.floor(Math.random() * selected.length)];
+        },
+        initGame() {
+            this.fillPool();
+            this.next();
+            this.buildHistoryMatrix();
         }
     },
     mounted() {
-        this.fillPool()
-        this.next()
-        this.buildHistoryMatrix()
+        this.initGame();
     },
     setup() {
         const { t } = useI18n({

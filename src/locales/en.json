@@ -12,7 +12,8 @@
       "input_wait": "Wait time after correct input",
       "font": "Font setting",
       "test_on": "Test on",
-      "nothing_can_be_shown": "Nothing can be shown"
+      "nothing_can_be_shown": "Nothing can be shown",
+      "enabled_rows": "Enabled rows of kana"
     },
     "history_title": "Stats",
     "history": {
