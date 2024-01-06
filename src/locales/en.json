@@ -13,7 +13,9 @@
       "font": "Font setting",
       "test_on": "Test on",
       "nothing_can_be_shown": "Nothing can be shown",
-      "enabled_rows": "Enabled rows of kana"
+      "enabled_rows": "Enabled rows of kana",
+      "play_sound": "Play Sound After Reveal",
+      "play_sound_not_supported": "Your browser does not support Web Speech API"
     },
     "history_title": "Stats",
     "history": {

@@ -13,13 +13,16 @@
     <summary>{{ t('settings_title') }}</summary>
     {{ t('settings.input_wait') }} <input type="number" v-model="this.settings.correct_wait_ms" /> ms
     <br />
-    Language:  <select v-model="$i18n.locale">
+    Language:  <select v-model="ui_language">
       <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
         {{ lang }}
       </option>
     </select>
     <br />
     {{ t('settings.font') }}: <input type="text" v-model="this.settings.font_css_str"/>
+    <br />
+    {{ t('settings.play_sound') }}: <input type="checkbox" v-model="settings.play_sound_enabled">
+    <p v-if="!speech_synthesis_supported">{{ t('settings.play_sound_not_supported') }}</p>
     <br />
     {{ t('settings.test_on')}}: 
     {{ t('hiragana')}} <input type="checkbox" v-model="hiragana_enabled">
@@ -131,9 +134,11 @@ export default {
             last_show_time: null,
             initial_input: true,
             settings: {
+                ui_language: 'zh',
                 correct_wait_ms: 1000,
-                font_css_str: 'serif, sans-serif',
-                enabled_rows: ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa", "(...)"]
+                font_css_str: 'sans-serif, serif',
+                enabled_rows: ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa", "(...)"],
+                play_sound_enabled: false
             },
             current: {
                 hiragana: "",
@@ -155,7 +160,9 @@ export default {
             langs: ['zh', 'en'],
             hiragana_enabled: true,
             katakana_enabled: true,
-            all_supported_rows: ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa", "(...)"]
+            all_supported_rows: ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa", "(...)"],
+            speech_synthesis_supported: false,
+            speech_synthesis_instance: null,
         }
     },
     computed: {
@@ -191,6 +198,15 @@ export default {
         },
         custom_css() {
             return `font-family: ${this.settings.font_css_str};`
+        },
+        ui_language: {
+            get() {
+                return this.$i18n.locale;
+            },
+            set(value) {
+                this.settings.ui_language = value;
+                this.$i18n.locale = value;
+            }
         }
     },
     methods: {
@@ -277,10 +293,13 @@ export default {
         },
         reveal() {
             this.updateHistory();
-            // console.log("Reveal")
             this.show_hiragana = true;
             this.show_katakana = true;
             this.show_sound = true;
+            if (this.settings.play_sound_enabled && this.speech_synthesis_supported) {
+                this.speech_synthesis_instance.text = this.current.katakana;  // a random decision, both should be fine
+                window.speechSynthesis.speak(this.speech_synthesis_instance);
+            }
         },
         next() {
             this.inputValue = ""
@@ -413,10 +432,26 @@ export default {
             this.fillPool();
             this.next();
             this.buildHistoryMatrix();
+        },
+        setSpeechSynthesis() {
+            if ('speechSynthesis' in window) {
+                this.speech_synthesis_supported = true;
+                this.speech_synthesis_instance = new SpeechSynthesisUtterance();
+                this.speech_synthesis_instance.lang = 'ja-JP';
+                this.speech_synthesis_instance.rate = 0.5;
+            }
+        },
+        loadSettings() {
+            let settings = localStorage.getItem('settings');
+            if (settings !== null) {
+                this.settings = JSON.parse(settings);
+            }
         }
     },
     mounted() {
         this.initGame();
+        this.setSpeechSynthesis();
+        this.loadSettings();
     },
     setup() {
         const { t } = useI18n({
@@ -427,6 +462,14 @@ export default {
         })
 
         return { t }
+    },
+    watch: {
+        settings: {
+            handler(newVal) {
+                localStorage.setItem('settings', JSON.stringify(newVal));
+            },
+            deep: true
+        }
     }
 }
 </script>
