@@ -36,6 +36,13 @@
         </label>
     </div>
     <p v-if="!hiragana_enabled && !katakana_enabled" style="color: red">{{ t('settings.nothing_can_be_shown')}}</p>
+    {{ t('settings.dark_mode') }}: 
+    <select v-model="settings.theme_mode">
+      <option value="system">{{ t('settings.theme_system') }}</option>
+      <option value="light">{{ t('settings.theme_light') }}</option>
+      <option value="dark">{{ t('settings.theme_dark') }}</option>
+    </select>
+    <br />
 </details>
 
 <details>
@@ -138,7 +145,8 @@ export default {
                 correct_wait_ms: 1000,
                 font_css_str: 'sans-serif, serif',
                 enabled_rows: ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa", "(...)"],
-                play_sound_enabled: false
+                play_sound_enabled: false,
+                theme_mode: 'system',
             },
             current: {
                 hiragana: "",
@@ -446,12 +454,26 @@ export default {
             if (settings !== null) {
                 this.settings = JSON.parse(settings);
             }
+        },
+        applyTheme() {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = this.settings.theme_mode === 'dark' || 
+                          (this.settings.theme_mode === 'system' && prefersDark);
+            
+            document.documentElement.classList.toggle('dark-mode', isDark);
+        },
+        initTheme() {
+            // 监听系统主题变化
+            window.matchMedia('(prefers-color-scheme: dark)')
+                .addEventListener('change', () => this.applyTheme());
+            this.applyTheme();
         }
     },
     mounted() {
         this.initGame();
         this.setSpeechSynthesis();
         this.loadSettings();
+        this.initTheme();
     },
     setup() {
         const { t } = useI18n({
@@ -469,6 +491,9 @@ export default {
                 localStorage.setItem('settings', JSON.stringify(newVal));
             },
             deep: true
+        },
+        'settings.theme_mode'() {
+            this.applyTheme();
         }
     }
 }
@@ -477,17 +502,31 @@ export default {
 <style>
 
 .large {
-    height: 200px;
-    width: 200px;
-    font-size: 100px;
+    height: min(200px, 30vh);
+    width: min(200px, 30vh);
+    font-size: min(100px, 15vh);
     vertical-align: middle;
     text-align: center;
 }
 
 .sound-input {
-    width: 30%;
+    width: min(30%, 300px);
     text-align: center;
-    font-size: 30px;
+    font-size: clamp(20px, 4vw, 30px);
+    margin: 0.5rem auto;
+}
+
+.sound-input {
+    border: none;
+    background: transparent;
+    padding: 0.25rem;
+    min-height: 1.5em;
+}
+
+input.sound-input {
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
 }
 
 .centered {
@@ -500,9 +539,101 @@ export default {
 
 .correct {
     background-color: #81c784;
+    transition: background-color 0.3s ease;
 }
 
 .incorrect {
     background-color: #e57373;
+    transition: background-color 0.3s ease;
+}
+
+details {
+    max-width: 800px;
+    margin: 0.5rem auto;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+}
+
+summary {
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    font-weight: bold;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 800px;
+    margin: 1rem auto;
+}
+
+td, th {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+}
+
+@media (max-width: 600px) {
+    .large {
+        height: min(150px, 25vh);
+        width: min(150px, 25vh);
+        font-size: min(75px, 12vh);
+    }
+    
+    table {
+        font-size: 0.9rem;
+    }
+}
+
+/* 暗色模式样式 */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --details-bg: #f5f5f5;
+    --border-color: #ddd;
+    --correct-color: #81c784;
+    --incorrect-color: #e57373;
+}
+
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --details-bg: #1e1e1e;
+    --border-color: #333;
+    --correct-color: #2e7d32;
+    --incorrect-color: #c62828;
+}
+
+/* 应用变量 */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+details {
+    background-color: var(--details-bg);
+}
+
+td, th {
+    border-color: var(--border-color);
+}
+
+.correct {
+    background-color: var(--correct-color);
+}
+
+.incorrect {
+    background-color: var(--incorrect-color);
+}
+
+input.sound-input {
+    border-color: var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* 暗色模式下的过渡效果 */
+body, details, td, th, input {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 </style>

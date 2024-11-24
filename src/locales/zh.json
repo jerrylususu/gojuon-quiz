@@ -15,7 +15,11 @@
     "nothing_can_be_shown": "没有可以显示的题目",
     "enabled_rows": "题目包含的五十音图行",
     "play_sound": "显示结果时播放读音",
-    "play_sound_not_supported": "您的浏览器不支持 Web Speech API"
+    "play_sound_not_supported": "您的浏览器不支持 Web Speech API",
+    "dark_mode": "主题模式",
+    "theme_system": "跟随系统",
+    "theme_light": "浅色",
+    "theme_dark": "深色"
   },
   "history_title": "历史数据",
   "history": {
