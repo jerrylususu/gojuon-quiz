@@ -1,52 +1,100 @@
 <template>
-<details>
-    <summary>{{ t('quickstart_title') }}</summary>
+<details class="quickstart-section">
+    <summary class="quickstart-summary">{{ t('quickstart_title') }}</summary>
 
+<div class="quickstart-content">
 <p>{{ t('quickstart_content.0') }}</p>
 <p>{{ t('quickstart_content.1') }}</p>
 <p>{{ t('quickstart_content.2') }}</p>
 <p>{{ t('quickstart_content.3') }}<a href="https://github.com/jerrylususu/gojuon-quiz" target="_blank" >Github</a></p>
 <p>{{ t('quickstart_content.4') }}</p>
+</div>
 
 </details>
-<details>
-    <summary>{{ t('settings_title') }}</summary>
-    {{ t('settings.input_wait') }} <input type="number" v-model="this.settings.correct_wait_ms" /> ms
-    <br />
-    Language:  <select v-model="ui_language">
-      <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
-        {{ lang }}
-      </option>
-    </select>
-    <br />
-    {{ t('settings.font') }}: <input type="text" v-model="this.settings.font_css_str"/>
-    <br />
-    {{ t('settings.play_sound') }}: <input type="checkbox" v-model="settings.play_sound_enabled">
-    <p v-if="!speech_synthesis_supported">{{ t('settings.play_sound_not_supported') }}</p>
-    <br />
-    {{ t('settings.test_on')}}: 
-    {{ t('hiragana')}} <input type="checkbox" v-model="hiragana_enabled">
-    {{ t('katakana')}} <input type="checkbox" v-model="katakana_enabled">
-    <br />
-    {{ t('settings.enabled_rows')}} 
-    <div>
-        <label v-for="(row, index) in all_supported_rows" :key="index">
-            <input type="checkbox" v-model="settings.enabled_rows" @change="initGame" :value="row">
-            {{ row }}
-        </label>
+<details class="settings-section">
+    <summary class="settings-summary">{{ t('settings_title') }}</summary>
+    <div class="settings-grid">
+        <div class="setting-item">
+            <label class="setting-label">{{ t('settings.input_wait') }}</label>
+            <div class="setting-control">
+                <input type="number" v-model="this.settings.correct_wait_ms" class="number-input" />
+                <span class="unit">ms</span>
+            </div>
+        </div>
+        
+        <div class="setting-item">
+            <label class="setting-label">Language</label>
+            <div class="setting-control">
+                <select v-model="ui_language" class="select-input">
+                    <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
+                        {{ lang }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="setting-item">
+            <label class="setting-label">{{ t('settings.font') }}</label>
+            <div class="setting-control">
+                <input type="text" v-model="this.settings.font_css_str" class="text-input" placeholder="sans-serif, serif"/>
+            </div>
+        </div>
+        
+        <div class="setting-item">
+            <label class="setting-label">{{ t('settings.play_sound') }}</label>
+            <div class="setting-control">
+                <label class="switch">
+                    <input type="checkbox" v-model="settings.play_sound_enabled">
+                    <span class="slider"></span>
+                </label>
+                <p v-if="!speech_synthesis_supported" class="warning-text">{{ t('settings.play_sound_not_supported') }}</p>
+            </div>
+        </div>
+        
+        <div class="setting-item">
+            <label class="setting-label">{{ t('settings.test_on') }}</label>
+            <div class="setting-control">
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" v-model="hiragana_enabled">
+                        <span class="checkbox-text">{{ t('hiragana') }}</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" v-model="katakana_enabled">
+                        <span class="checkbox-text">{{ t('katakana') }}</span>
+                    </label>
+                </div>
+                <p v-if="!hiragana_enabled && !katakana_enabled" class="error-text">{{ t('settings.nothing_can_be_shown')}}</p>
+            </div>
+        </div>
+        
+        <div class="setting-item">
+            <label class="setting-label">{{ t('settings.enabled_rows') }}</label>
+            <div class="setting-control">
+                <div class="checkbox-grid">
+                    <label v-for="(row, index) in all_supported_rows" :key="index" class="checkbox-label">
+                        <input type="checkbox" v-model="settings.enabled_rows" @change="initGame" :value="row">
+                        <span class="checkbox-text">{{ row }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="setting-item">
+            <label class="setting-label">{{ t('settings.dark_mode') }}</label>
+            <div class="setting-control">
+                <select v-model="settings.theme_mode" class="select-input">
+                    <option value="system">{{ t('settings.theme_system') }}</option>
+                    <option value="light">{{ t('settings.theme_light') }}</option>
+                    <option value="dark">{{ t('settings.theme_dark') }}</option>
+                </select>
+            </div>
+        </div>
     </div>
-    <p v-if="!hiragana_enabled && !katakana_enabled" style="color: red">{{ t('settings.nothing_can_be_shown')}}</p>
-    {{ t('settings.dark_mode') }}: 
-    <select v-model="settings.theme_mode">
-      <option value="system">{{ t('settings.theme_system') }}</option>
-      <option value="light">{{ t('settings.theme_light') }}</option>
-      <option value="dark">{{ t('settings.theme_dark') }}</option>
-    </select>
-    <br />
 </details>
 
-<details>
-    <summary>{{ t('history_title') }}</summary>
+<details class="history-section">
+    <summary class="history-summary">{{ t('history_title') }}</summary>
     <table>
         <tr>
             <th>{{ t('history.overall_accuracy') }}</th>
@@ -90,8 +138,8 @@
 <div class="centered" v-show="initial_input">{{ t('click_above_to_start') }}</div>
 </div>
 
-<details>
-    <summary>{{ t('speed_stat') }} (ms)</summary>
+<details class="speed-section">
+    <summary class="speed-summary">{{ t('speed_stat') }} (ms)</summary>
     <table>
         <tr v-for="(row, hidx) in this.history" :key="hidx">
             <td v-for="(item, vidx) in row" :key="vidx" :style="this.speed_style(item)">
@@ -102,8 +150,8 @@
     </table>
 </details>
 
-<details>
-    <summary>{{ t('accuracy_stat') }}</summary>
+<details class="accuracy-section">
+    <summary class="accuracy-summary">{{ t('accuracy_stat') }}</summary>
     <table>
         <tr v-for="(row, hidx) in this.history" :key="hidx">
             <td v-for="(item, vidx) in row" :key="vidx" :style="this.accuracy_style(item)">
@@ -557,8 +605,16 @@ details {
 
 summary {
     cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    font-weight: bold;
+    padding: 0.5rem 0.75rem;
+    font-weight: 500;
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+summary:hover {
+    background-color: var(--bg-color);
+    opacity: 0.9;
 }
 
 table {
@@ -635,5 +691,216 @@ input.sound-input {
 /* 暗色模式下的过渡效果 */
 body, details, td, th, input {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Section Styles */
+.quickstart-section, .settings-section, .history-section, .speed-section, .accuracy-section {
+    margin: 0.5rem auto;
+    padding: 0.75rem;
+    border-radius: 8px;
+    background-color: var(--details-bg);
+    border: 1px solid var(--border-color);
+}
+
+.quickstart-content {
+    padding: 0.5rem 0;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.setting-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.setting-label {
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.setting-control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.number-input, .text-input, .select-input {
+    padding: 0.5rem 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.number-input:focus, .text-input:focus, .select-input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.number-input {
+    width: 80px;
+}
+
+.text-input {
+    width: 200px;
+}
+
+.select-input {
+    min-width: 120px;
+    cursor: pointer;
+}
+
+.unit {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+/* Switch Toggle */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Checkbox Groups */
+.checkbox-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 500px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.checkbox-label:hover {
+    background-color: var(--bg-color);
+    opacity: 0.8;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #4CAF50;
+}
+
+.checkbox-text {
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+/* Status Messages */
+.warning-text {
+    color: #ff9800;
+    font-size: 0.85rem;
+    margin: 0.25rem 0;
+    font-weight: 500;
+}
+
+.error-text {
+    color: #f44336;
+    font-size: 0.85rem;
+    margin: 0.25rem 0;
+    font-weight: 500;
+}
+
+/* Responsive Settings */
+@media (max-width: 768px) {
+    .settings-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .setting-control {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .checkbox-grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 350px;
+    }
+}
+
+@media (max-width: 480px) {
+    .settings-section {
+        padding: 0.75rem;
+        margin: 0.25rem auto;
+    }
+    
+    .settings-grid {
+        padding: 0.5rem 0;
+        gap: 0.75rem;
+    }
+    
+    .checkbox-group {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
 }
 </style>
